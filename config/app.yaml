@@ -1,0 +1,4 @@
+mysql: 
+  dns: root:tencentYun123456@tcp(www.artnecthub.com:3306)/goim-server?charset=utf8mb4&parseTime=True&loc=Local
+
+secretKey: hf-goim-server
