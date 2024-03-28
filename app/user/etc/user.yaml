@@ -1,0 +1,127 @@
+# RPC 服务器配置
+RpcServerConf:
+  # 服务器监听地址
+  ListenOn: "127.0.0.1:8080"
+  # 最大并发数
+  MaxConcurrency: 1000
+  # 超时时间（单位：毫秒）
+  Timeout: 5000
+
+# Redis 连接配置
+RedisConf:
+  # Redis 地址
+  Address: "127.0.0.1:6379"
+  # 密码
+  Password: ""
+  # 数据库编号
+  Database: 0
+
+# MongoDB 集合配置
+MongoCollection:
+  User:
+    # MongoDB 连接地址
+    Address: "mongodb://127.0.0.1:27017"
+    # 数据库名称
+    Database: "xxim"
+    # 用户集合名称
+    Collection: "user"
+  UserSetting:
+    # MongoDB 连接地址
+    Address: "mongodb://127.0.0.1:27017"
+    # 数据库名称
+    Database: "xxim"
+    # 用户设置集合名称
+    Collection: "user_setting"
+
+# 账户配置
+Account:
+  # JWT 配置
+  JwtConfig:
+    # 密钥
+    Secret: "your_secret_key"
+    # 过期时间（单位：秒）
+    Expire: 3600
+  # 用户名是否唯一
+  UsernameUnique: true
+  # 用户名正则表达式
+  UserRegex: ""
+  # 手机号是否唯一
+  PhoneUnique: true
+  # 手机号正则表达式
+  PhoneRegex: ""
+  # 国家区号
+  PhoneCode: ["86"]
+  # 邮箱是否唯一
+  EmailUnique: true
+  # 邮箱正则表达式
+  EmailRegex: ""
+  # 注册配置
+  Register:
+    # 可接受的平台
+    AllowPlatform: [IOS, ANDROID, WEB]
+    # 是否必填密码
+    RequirePassword: true
+    # 是否必填昵称
+    RequireNickname: true
+    # 默认昵称规则
+    DefaultNicknameRule: "random"
+    # 固定昵称
+    FixedNickname: "用户"
+    # 随机昵称前缀
+    RandomNicknamePrefix: "用户"
+    # 是否必填头像
+    RequireAvatar: false
+    # 默认头像规则
+    DefaultAvatarRule: "byName"
+    # 固定头像
+    FixedAvatar: "group_avatar.png"
+    # 是否必须绑定手机号
+    RequireBindPhone: false
+    # 是否必须绑定邮箱
+    RequireBindEmail: false
+    # 是否验证图形验证码
+    RequireCaptcha: false
+  # 登录配置
+  Login:
+    # 可接受的平台
+    AllowPlatform: [IOS, ANDROID, WEB]
+    # 是否验证图形验证码
+    RequireCaptcha: false
+  # 机器人配置
+  Robot:
+    # 是否允许用户创建机器人
+    AllowCreate: true
+    # 是否必填昵称
+    RequireNickname: false
+    # 默认昵称
+    DefaultNickname: "Robot"
+    # 是否必填头像
+    RequireAvatar: false
+
+# RPC 客户端配置
+RpcClientConf:
+  Dispatch:
+    # Dispatch 服务地址
+    Endpoints: ["127.0.0.1:8081"]
+    # 是否非阻塞
+    NonBlock: true
+  User:
+    # User 服务地址
+    Endpoints: ["127.0.0.1:8082"]
+    # 是否非阻塞
+    NonBlock: true
+  Conversation:
+    # Conversation 服务地址
+    Endpoints: ["127.0.0.1:8083"]
+    # 是否非阻塞
+    NonBlock: true
+  Third:
+    # Third 服务地址
+    Endpoints: ["127.0.0.1:8084"]
+    # 是否非阻塞
+    NonBlock: true
+  Message:
+    # Message 服务地址
+    Endpoints: ["127.0.0.1:8085"]
+    # 是否非阻塞
+    NonBlock: true

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"Goim-server/models"
+	"Goim-server/app/user/internal/models"
 	"Goim-server/utils"
 	"fmt"
 	"net/http"

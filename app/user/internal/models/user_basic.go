@@ -1,7 +1,7 @@
 package models
 
 import (
-	"Goim-server/utils"
+	"Goim-server/common/utils"
 	"fmt"
 	"time"
 
