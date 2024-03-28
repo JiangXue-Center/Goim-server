@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Goim-server/models"
+	"Goim-server/app/user/internal/models"
 	"fmt"
 
 	"github.com/spf13/viper"
