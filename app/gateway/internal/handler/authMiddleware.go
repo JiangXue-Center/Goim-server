@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"Goim-server/utils"
+	"Goim-server/common/utils"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"

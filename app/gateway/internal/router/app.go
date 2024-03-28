@@ -1,7 +1,7 @@
 package router
 
 import (
-	"Goim-server/handler"
+	"Goim-server/app/gateway/internal/handler"
 	"Goim-server/service"
 
 	"github.com/gin-gonic/gin"
