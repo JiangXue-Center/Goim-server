@@ -1,40 +1,52 @@
 package main
 
 import (
-	"Goim-server/app/user/internal/config"
-	accountservice "Goim-server/app/user/internal/server/accountservice"
-	callbackservice "Goim-server/app/user/internal/server/callbackservice"
-	infoservice "Goim-server/app/user/internal/server/infoservice"
-	"Goim-server/app/user/internal/svc"
-	"Goim-server/common/pb"
-	"flag"
-	"github.com/zeromicro/go-zero/core/conf"
-	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/go-zero/core/service"
-	"github.com/zeromicro/go-zero/zrpc"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
+    "github.com/gin-gonic/gin"
+    "net/http"
 )
 
-var configFile = flag.String("f", "etc/user.yaml", "the config file")
-
 func main() {
-	flag.Parse()
+    // 创建一个默认的 Gin 路由器
+    router := gin.Default()
 
-	var c config.Config
-	conf.MustLoad(*configFile, &c)
-	ctx := svc.NewServiceContext(c)
-	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		pb.RegisterAccountServiceServer(grpcServer, accountservice.NewAccountServiceServer(ctx))
-		pb.RegisterCallbackServiceServer(grpcServer, callbackservice.NewCallbackServiceServer(ctx))
-		pb.RegisterInfoServiceServer(grpcServer, infoservice.NewInfoServiceServer(ctx))
+    // 定义一个带参数的 GET 路由
+    router.GET("/user/:name", func(c *gin.Context) {
+        name := c.Param("name")
+        c.JSON(http.StatusOK, gin.H{
+            "user": name,
+        })
+    })
 
-		if c.Mode == service.DevMode || c.Mode == service.TestMode {
-			reflection.Register(grpcServer)
-		}
-	})
-	defer s.Stop()
+    // 定义一个带查询参数的 GET 路由
+    router.GET("/welcome", func(c *gin.Context) {
+        firstname := c.DefaultQuery("firstname", "Guest")
+        lastname := c.Query("lastname")
 
-	logx.Info("staring rpc server at %s...\n", c.ListenOn)
-	s.Start()
+        c.JSON(http.StatusOK, gin.H{
+            "firstname": firstname,
+            "lastname":  lastname,
+        })
+    })
+
+    // 定义一个 POST 路由
+    router.POST("/login", func(c *gin.Context) {
+        var json struct {
+            User     string `json:"user" binding:"required"`
+            Password string `json:"password" binding:"required"`
+        }
+
+        if err := c.ShouldBindJSON(&json); err != nil {
+            c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+            return
+        }
+
+        if json.User == "admin" && json.Password == "admin" {
+            c.JSON(http.StatusOK, gin.H{"status": "you are logged in"})
+        } else {
+            c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
+        }
+    })
+
+    // 启动并运行服务器
+    router.Run(":8080")
 }

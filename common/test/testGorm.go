@@ -1,7 +1,6 @@
 package main
 
 import (
-	"Goim-server/app/user/internal/models"
 	"fmt"
 
 	"github.com/spf13/viper"
@@ -21,11 +20,12 @@ func main() {
 
 	db, err := gorm.Open(mysql.Open("root:tencentYun123456@tcp(www.artnecthub.com:3306)/goim-server?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
 	if err != nil {
+		fmt.Println(db)
 		panic("failed to connect database")
 	}
 
 	// 迁移 schema
-	db.AutoMigrate(&models.UserBasic{})
+	// db.AutoMigrate(&models.UserBasic{})
 
 	// Create
 	// user := &models.UserBasic{}
