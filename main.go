@@ -1,8 +1,7 @@
 package main
 
 import (
-	"Goim-server/app/user/routes"
-
+	"Goim-server/app/user/internal/routes"
 	"github.com/gin-gonic/gin"
 )
 
