@@ -14,3 +14,8 @@ type User struct {
 	Avatar   string `json:"avatar"`
 	Salt     string `json:"salt"`
 }
+
+// TableName 指定表名为 `user`
+func (User) TableName() string {
+	return "user"
+}

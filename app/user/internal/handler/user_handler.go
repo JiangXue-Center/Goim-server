@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"Goim-server/app/user/internal/models/request"
+	accountservice "Goim-server/app/user/internal/server/accountservice"
+	"Goim-server/common/response"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -22,22 +25,23 @@ func Welcome(c *gin.Context) {
 	})
 }
 
-func Login(c *gin.Context) {
-	var json struct {
-		User     string `json:"user" binding:"required"`
-		Password string `json:"password" binding:"required"`
-	}
-
-	if err := c.ShouldBindJSON(&json); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+func Register(c *gin.Context) {
+	var req request.RegisterRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.JSONResponse(c, "fail to format JSON", http.StatusBadRequest, "")
 		return
 	}
+	resp := accountservice.RegisterUser(&req)
+	response.JSONResponse(c, resp.Message, resp.Code, resp.Data)
+}
 
-	if json.User == "admin" && json.Password == "admin" {
-		c.JSON(http.StatusOK, gin.H{"status": "you are logged in"})
-	} else {
-		c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
+func Login(c *gin.Context) {
+	var req request.LoginRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.JSONResponse(c, "fail to format JSON", http.StatusBadRequest, "")
 	}
+	resp := accountservice.LoginUser(&req)
+	response.JSONResponse(c, resp.Message, resp.Code, resp.Data)
 }
 
 func Hello(c *gin.Context) {
