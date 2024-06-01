@@ -2,48 +2,59 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
+type User struct {
+	gorm.Model
+	Name     string `json:"name"`
+	Password string `json:"password"`
+	Phone    string `json:"phone" valid:"matches(^1[3-9]{1}\\d{9}$)"`
+	Email    string `json:"email" valid:"email"`
+	Avatar   string `json:"avatar"`
+	Salt     string `json:"salt"`
+}
+
+// TableName 指定表名为 `user`
+func (User) TableName() string {
+	return "user"
+}
+
 func main() {
+	// 设置配置文件名和路径
 	viper.SetConfigName("app")
-	viper.AddConfigPath("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath("../../config") // 指定配置文件的目录
+
+	// 读取配置文件
 	err := viper.ReadInConfig()
 	if err != nil {
-		fmt.Println(err)
+		log.Fatalf("Error reading config file: %v", err)
 	}
+
+	// 打印读取到的配置
 	fmt.Println("config app:", viper.Get("app"))
-	fmt.Println("config mysql", viper.Get("mysql"))
+	fmt.Println("config mysql:", viper.Get("mysql"))
 
-	db, err := gorm.Open(mysql.Open("root:tencentYun123456@tcp(www.artnecthub.com:3306)/goim-server?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
-	if err != nil {
-		fmt.Println(db)
-		panic("failed to connect database")
+	// 从配置文件中读取数据库连接信息
+	dsn := viper.GetString("mysql.dsn")
+	if dsn == "" {
+		log.Fatalf("Database DSN not found in config")
 	}
 
-	// 迁移 schema
-	// db.AutoMigrate(&models.UserBasic{})
+	// 连接数据库
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("failed to connect database: %v", err)
+	}
 
-	// Create
-	// user := &models.UserBasic{}
-	// user.Name = "Hf"
-	// db.Create(user)
-
-	// Read
-	// var product Product
-	// db.First(&product, 1) // 根据整型主键查找
-	// db.First(&product, "code = ?", "D42") // 查找 code 字段值为 D42 的记录
-	// fmt.Println(db.First(user, 1))
-
-	// // Update - 将 product 的 price 更新为 200
-	// db.Model(user).Update("Password", "123456")
-	// Update - 更新多个字段
-	// db.Model(&product).Updates(Product{Price: 200, Code: "F42"}) // 仅更新非零值字段
-	// db.Model(&product).Updates(map[string]interface{}{"Price": 200, "Code": "F42"})
-
-	// // Delete - 删除 product
-	// db.Delete(&product, 1)
+	// 自动迁移数据库表
+	err = db.AutoMigrate(&User{})
+	if err != nil {
+		log.Fatalf("failed to migrate database: %v", err)
+	}
 }
