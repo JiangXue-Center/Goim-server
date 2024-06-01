@@ -13,5 +13,5 @@ func SetupRoutes(router *gin.Engine) {
 	router.GET("/hello", handlers.Hello)
 
 	// WebSocket 路由
-	router.GET("/ws", handlers.WebSocketHandler)
+	router.GET("/ws/:id", handlers.WebSocketHandler)
 }
