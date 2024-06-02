@@ -5,19 +5,19 @@ import (
 	"time"
 )
 
-var jwtKey = []byte("your_secret_key")
+var jwtKey = []byte("Hf")
 
 // Claims 是包含了标准的 JWT 和自定义信息的结构
 type Claims struct {
-	Username string `json:"username"`
+	ID string `json:"id"`
 	jwt.RegisteredClaims
 }
 
 // GenerateJWT 生成一个 JWT token
-func GenerateJWT(username string) (string, error) {
+func GenerateJWT(id string) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
-		Username: username,
+		ID: id,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},

@@ -33,3 +33,7 @@ func (x *xRedisVal) HashKeyConvKv(convId string, convTyp int32) string {
 func (x *xRedisVal) HashKeyConvMinSeq(userId string) string {
 	return fmt.Sprintf("min_seq:%s", userId)
 }
+
+func (x *xRedisVal) LoginUserId(userId uint) string {
+	return fmt.Sprintf("Goim-server:login:user:%d", userId)
+}

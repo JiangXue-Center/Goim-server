@@ -3,11 +3,14 @@ package server
 import (
 	"Goim-server/app/user/internal/models"
 	"Goim-server/app/user/internal/models/request"
+	"Goim-server/common/cache"
 	"Goim-server/common/database"
 	"Goim-server/common/response"
 	"Goim-server/common/utils"
 	"log"
 	"net/http"
+	"strconv"
+	"time"
 )
 
 func RegisterUser(req *request.RegisterRequest) response.Response {
@@ -66,9 +69,26 @@ func LoginUser(req *request.LoginRequest) response.Response {
 			Data:    "",
 		}
 	}
+
+	token, err := utils.GenerateJWT(strconv.FormatUint(uint64(user.ID), 10))
+	if err != nil {
+		return response.Response{
+			Message: "Failed to generate token",
+			Code:    http.StatusInternalServerError,
+			Data:    "",
+		}
+	}
+	err = cache.SetValue(cache.RedisVal.LoginUserId(user.ID), token, 7*24*time.Hour)
+	if err != nil {
+		return response.Response{
+			Message: "Internal server error",
+			Code:    http.StatusInternalServerError,
+			Data:    "",
+		}
+	}
 	return response.Response{
 		Message: "User logged in",
 		Code:    http.StatusOK,
-		Data:    "token",
+		Data:    token,
 	}
 }
