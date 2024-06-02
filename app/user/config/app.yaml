@@ -3,4 +3,13 @@ app: Goim-server
 mysql:
   dsn: root:tencentYun123456@tcp(www.artnecthub.com:3306)/goim-server?charset=utf8mb4&parseTime=True&loc=Local
 
+redis:
+  addr: "www.artnecthub.com:6379"
+  password: "tencentYun123456"
+  db: 10
+  pool_size: 10
+  min_idle_conns: 3
+  pool_timeout: 240
+
+
 secretKey: hf-goim-server

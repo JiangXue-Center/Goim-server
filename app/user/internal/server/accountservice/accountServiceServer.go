@@ -1,9 +1,9 @@
 package server
 
 import (
-	"Goim-server/app/user/internal/database"
 	"Goim-server/app/user/internal/models"
 	"Goim-server/app/user/internal/models/request"
+	"Goim-server/common/database"
 	"Goim-server/common/response"
 	"Goim-server/common/utils"
 	"log"

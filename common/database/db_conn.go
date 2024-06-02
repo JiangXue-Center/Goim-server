@@ -13,7 +13,7 @@ var MysqlDB *gorm.DB
 func InitMySqlDB() {
 	viper.SetConfigName("app")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("../config") // 指定配置文件的目录
+	viper.AddConfigPath("../../user/config") // 指定配置文件的目录
 
 	var err error
 
